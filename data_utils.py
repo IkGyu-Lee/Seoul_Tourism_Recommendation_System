@@ -27,16 +27,13 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler, QuantileTransfor
 class Preprocessing():
     def __init__(self, shuffle):
         self.shuffle = shuffle
-        self.merged_df, self.destination_id_name_df = self.read_dataset()
+        self.merged_df = self.read_dataset()
 
     def read_dataset(self):
         # Dataframe 불러오기
-        # merged_df = pd.read_csv("../../Preprocessing/Datasets_v3.1/Datasets_v3.1.txt", sep='|')
-        # destination_id_name_df = pd.read_csv("../../Preprocessing/Datasets_v3.1/destination_id_name.csv")
-        merged_df = pd.read_csv("dataset/Datasets_v3.1.txt", sep='|')
-        destination_id_name_df = pd.read_csv('dataset/destination_id_name.csv')
+        merged_df = pd.read_csv("dataset/Training_Datasets_MF_NCF_NGCF.txt", sep='|')
         print("Complete Reading Datasets")
-        return merged_df, destination_id_name_df
+        return merged_df
 
     def get_num(self):
         num_destination = self.merged_df['destination'].max()+1
