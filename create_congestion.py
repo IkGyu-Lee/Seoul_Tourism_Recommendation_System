@@ -29,6 +29,9 @@ class Sample_Dataset(Dataset):
         return destination, time, dayofweek, month, day
 
 ############################################################################################################
+use_pretrain = 'False'
+model_name = 'MF'
+epochs = '20'
 sample_df = pd.read_csv('../../Preprocessing/Datasets_v3.1/sample_for_congestion.csv')
 # sample_df = pd.read_csv('../dataset/sample_for_congestion.csv')
 
@@ -37,8 +40,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # PATH of Pretained Model about congestion1, congestion2
 FOLDER_PATH = 'pretrain_model'
-MODEL_PATH_CONGESTION1 = os.path.join(FOLDER_PATH, f'0_False_MF_20_512_congestion_1.pth')
-MODEL_PATH_CONGESTION2 = os.path.join(FOLDER_PATH, f'0_False_MF_20_512_congestion_2.pth')
+MODEL_PATH_CONGESTION1 = os.path.join(FOLDER_PATH, f'0_{use_pretrain}_{model_name}_{epochs}_512_48_congestion_1.pth')
+MODEL_PATH_CONGESTION2 = os.path.join(FOLDER_PATH, f'0_{use_pretrain}_{model_name}_{epochs}_512_48_congestion_2.pth')
 
 # the number of feature
 num_destination = sample_df['destination'].max() + 1

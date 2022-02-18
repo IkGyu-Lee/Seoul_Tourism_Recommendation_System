@@ -88,8 +88,8 @@ if rating_name == 'visitor':
         optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
     elif args.model_name == 'NeuMF':
         if use_pretrain:
-            GMF_dir = os.path.join(pretrain_dir, f'{args.shuffle}_False_GMF_{args.epochs}_{args.batch}_{rating_name}.pth')
-            MLP_dir = os.path.join(pretrain_dir, f'{args.shuffle}_False_MLP_{args.epochs}_{args.batch}_{rating_name}.pth')
+            GMF_dir = os.path.join(pretrain_dir, f'{args.shuffle}_False_GMF_{args.epochs}_{args.batch}_{args.num_factors}_{rating_name}.pth')
+            MLP_dir = os.path.join(pretrain_dir, f'{args.shuffle}_False_MLP_{args.epochs}_{args.batch}_{args.num_factors}_{rating_name}.pth')
 
             pretrained_GMF = GMF(num_factor=args.num_factors,
                                  num_dayofweek=num_dayofweek,
@@ -243,5 +243,5 @@ else:
 
 if save_model:
     MODEL_PATH = os.path.join(pretrain_dir,
-                              f'{args.shuffle}_{use_pretrain}_{args.model_name}_{args.epochs}_{args.batch}_{rating_name}.pth')
+                              f'{args.shuffle}_{use_pretrain}_{args.model_name}_{args.epochs}_{args.batch}_{args.num_factors}_{rating_name}.pth')
     torch.save(model.state_dict(), MODEL_PATH)

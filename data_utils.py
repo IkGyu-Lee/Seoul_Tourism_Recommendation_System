@@ -27,13 +27,16 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler, QuantileTransfor
 class Preprocessing():
     def __init__(self, shuffle):
         self.shuffle = shuffle
-        self.merged_df = self.read_dataset()
+        self.merged_df, self.destination_id_name_df = self.read_dataset()
 
     def read_dataset(self):
         # Dataframe 불러오기
-        merged_df = pd.read_csv("dataset/Training_Datasets_MF_NCF_NGCF.txt", sep='|')
+        # merged_df = pd.read_csv("../../Preprocessing/Datasets_v3.1/Datasets_v3.1.txt", sep='|')
+        # destination_id_name_df = pd.read_csv("../../Preprocessing/Datasets_v3.1/destination_id_name.csv")
+        merged_df = pd.read_csv("dataset/Datasets_v3.1.txt", sep='|')
+        destination_id_name_df = pd.read_csv('dataset/destination_id_name.csv')
         print("Complete Reading Datasets")
-        return merged_df
+        return merged_df, destination_id_name_df
 
     def get_num(self):
         num_destination = self.merged_df['destination'].max()+1
@@ -47,11 +50,7 @@ class Preprocessing():
 
     def preprocessing(self):
         scaler = StandardScaler()
-
         total_df = self.merged_df.copy()
-        df2018 = total_df[total_df['year']==2018]
-        df2019 = total_df[total_df['year']==2019]
-        df2020 = total_df[total_df['year']==2020]
 
         # congetion^-1
         # total_df[['congestion_1','congestion_2']] = 1/total_df[['congestion_1','congestion_2']]
@@ -61,10 +60,12 @@ class Preprocessing():
 
         # congestion normalize & train test split
         if self.shuffle == 0:
+            total_df[['congestion_1','congestion_2','visitor']] = scaler.fit_transform(pd.DataFrame(total_df[['congestion_1','congestion_2','visitor']]))
+            df2018 = total_df[total_df['year']==2018]
+            df2019 = total_df[total_df['year']==2019]
+            df2020 = total_df[total_df['year']==2020]
             train_df = df2018
             test_df = df2019
-            train_df[['congestion_1','congestion_2','visitor']] = scaler.fit_transform(pd.DataFrame(train_df[['congestion_1','congestion_2','visitor']]))
-            test_df[['congestion_1','congestion_2','visitor']] = scaler.fit_transform(pd.DataFrame(test_df[['congestion_1','congestion_2','visitor']]))
             print("Complete Normalize Datasets")
         else:
             total_df[['congestion_1','congestion_2','visitor']] = scaler.fit_transform(pd.DataFrame(total_df[['congestion_1','congestion_2','visitor']]))
