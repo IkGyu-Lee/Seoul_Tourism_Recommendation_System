@@ -60,7 +60,8 @@ class Preprocessing():
 
         # congestion normalize & train test split
         if self.shuffle == 0:
-            total_df[['congestion_1','congestion_2','visitor']] = scaler.fit_transform(pd.DataFrame(total_df[['congestion_1','congestion_2','visitor']]))
+            total_df[['congestion_1','congestion_2','visitor']] =\
+                scaler.fit_transform(pd.DataFrame(total_df[['congestion_1','congestion_2','visitor']]))
             df2018 = total_df[total_df['year']==2018]
             df2019 = total_df[total_df['year']==2019]
             df2020 = total_df[total_df['year']==2020]
@@ -68,9 +69,13 @@ class Preprocessing():
             test_df = df2019
             print("Complete Normalize Datasets")
         else:
-            total_df[['congestion_1','congestion_2','visitor']] = scaler.fit_transform(pd.DataFrame(total_df[['congestion_1','congestion_2','visitor']]))
+            total_df[['congestion_1','congestion_2','visitor']] =\
+                scaler.fit_transform(pd.DataFrame(total_df[['congestion_1','congestion_2','visitor']]))
             print("Complete Normalize Datasets")
-            train_df, test_df, y_train, y_test = train_test_split(total_df, total_df['destination'], test_size=0.3, stratify=total_df['destination'], random_state=42)
+            train_df, test_df, y_train, y_test = train_test_split(total_df, total_df['destination'],
+                                                                  test_size=0.3,
+                                                                  stratify=total_df['destination'],
+                                                                  random_state=42)
 
         print("Complete Train Test Split")
         return train_df, test_df
@@ -85,13 +90,15 @@ class Tourism(Dataset):
         super(Tourism, self).__init__()
         self.df = df
         self.rating_name = rating_name
-        self.destination, self.time, self.sex, self.age, self.dayofweek, self.month, self.day, self.rating = self.change_tensor()
+        self.destination, self.time, self.sex, self.age, self.dayofweek, self.month, self.day, self.rating =\
+            self.change_tensor()
 
     def __len__(self):
         return len(self.df)
 
     def __getitem__(self, idx):
-        return self.destination[idx], self.time[idx], self.sex[idx], self.age[idx], self.dayofweek[idx], self.month[idx], self.day[idx], self.rating[idx]
+        return self.destination[idx], self.time[idx], self.sex[idx], self.age[idx], self.dayofweek[idx],\
+               self.month[idx], self.day[idx], self.rating[idx]
 
     def change_tensor(self):
         rating_name = self.rating_name
@@ -117,7 +124,8 @@ class Congestion_Dataset(Dataset):
         return len(self.df)
 
     def __getitem__(self, idx):
-        return self.destination[idx], self.time[idx], self.dayofweek[idx], self.month[idx], self.day[idx], self.rating[idx]
+        return self.destination[idx], self.time[idx], self.dayofweek[idx], self.month[idx],\
+               self.day[idx], self.rating[idx]
 
     def change_tensor(self):
         rating_name = self.rating_name
@@ -134,6 +142,7 @@ class Input_Dataset(Dataset):
     def __init__(self, destination_list, RecSys_input):
         super(Input_Dataset, self).__init__()
         self.destination_list = destination_list
+        self.num_dest = len(destination_list)
         self.RecSys_input = RecSys_input
         self.month, self.day, self.dayofweek, self.time, self.sex, self.age, self.destination = self.change_tensor()
 
@@ -141,14 +150,15 @@ class Input_Dataset(Dataset):
         return len(self.month)
 
     def __getitem__(self, idx):
-        return self.destination[idx], self.time[idx], self.sex[idx], self.age[idx], self.dayofweek[idx], self.month[idx], self.day[idx]
+        return self.destination[idx], self.time[idx], self.sex[idx], self.age[idx], self.dayofweek[idx],\
+               self.month[idx], self.day[idx]
 
     def change_tensor(self):
-        month = torch.tensor([self.RecSys_input[0]] * 100)
-        day = torch.tensor([self.RecSys_input[1]] * 100)
-        dayofweek = torch.tensor([self.RecSys_input[2]] * 100)
-        time = torch.tensor([self.RecSys_input[3]] * 100)
-        sex = torch.tensor([self.RecSys_input[4]] * 100)
-        age = torch.tensor([self.RecSys_input[5]] * 100)
+        age = torch.tensor([self.RecSys_input[0]] * self.num_dest)
+        sex = torch.tensor([self.RecSys_input[1]] * self.num_dest)
+        month = torch.tensor([self.RecSys_input[2]] * self.num_dest)
+        day = torch.tensor([self.RecSys_input[3]] * self.num_dest)
+        dayofweek = torch.tensor([self.RecSys_input[4]] * self.num_dest)
+        time = torch.tensor([self.RecSys_input[5]] * self.num_dest)
         destination = torch.tensor(self.destination_list)
         return month, day, dayofweek, time, sex, age, destination
