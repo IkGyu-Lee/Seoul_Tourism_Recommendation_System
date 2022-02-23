@@ -37,10 +37,10 @@ from model_visitor.NeuMF import NeuMF
 '''
 
 def define_args():
-    use_pretrain = 'False'
-    model_name = 'GMF'
-    epochs = '20'
-    num_factors = '36'
+    use_pretrain = False
+    model_name = 'NeuMF'  # Choice GMF, MLP, NeuMF
+    epochs = 10           # Choice 20,  10,  10
+    num_factors = 36      # Choice 36,  24,  36
     return use_pretrain, model_name, epochs, num_factors
 
 def input_filterchar(userinfo:str):
@@ -166,7 +166,7 @@ if __name__ == '__main__' :
 
         user_df = pd.concat([user_df, tem_df], axis=0, ignore_index=True)
 
-    print(user_df)
+    # print(user_df)
 
     # input for staring point
     print("어디서 출발하시나요? 행정구와 동을 입력해주세요. ex) 종로구 삼청동")
@@ -237,9 +237,6 @@ if __name__ == '__main__' :
                             use_NeuMF=False,
                             pretrained_MLP=None)
     elif model_name == 'NeuMF':
-        pretrained_GMF_visitor = None
-        pretrained_MLP_visitor = None
-
         model_visitor = NeuMF(num_factor=36,
                               num_layer=3,
                               num_dayofweek=7,
@@ -249,10 +246,10 @@ if __name__ == '__main__' :
                               num_month=13,
                               num_day=32,
                               num_destination=2505928,
-                              use_pretrain=use_pretrain,
+                              use_pretrain=False,
                               use_NeuMF=True,
-                              pretrained_GMF=pretrained_GMF_visitor,
-                              pretrained_MLP=pretrained_MLP_visitor)
+                              pretrained_GMF=None,
+                              pretrained_MLP=None)
 
     model_visitor.load_state_dict(torch.load(MODEL_PATH_VISITOR,map_location=device))
     print("Load Model complete\n")
