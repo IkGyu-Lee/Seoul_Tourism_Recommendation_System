@@ -27,4 +27,4 @@ def define_args():
 ```
 
 ### Demo Video
-<img width="100%" src="https://i.imgur.com/VUkg97W.gif"/>
+<img width="100%" src="demo_video/demo_video.gif"/>
