@@ -39,6 +39,7 @@ class Preprocessing():
         return merged_df, destination_id_name_df
 
     def get_num(self):
+        # the number of features
         num_destination = self.merged_df['destination'].max()+1
         num_time = self.merged_df['time'].max()+1
         num_sex = self.merged_df['sex'].max()+1
@@ -49,16 +50,12 @@ class Preprocessing():
         return num_destination, num_time, num_sex, num_age, num_dayofweek, num_month, num_day
 
     def preprocessing(self):
+        # Scaling
         scaler = StandardScaler()
         total_df = self.merged_df.copy()
 
-        # congetion^-1
-        # total_df[['congestion_1','congestion_2']] = 1/total_df[['congestion_1','congestion_2']]
-        # df2018[['congestion_1','congestion_2']] = 1/df2018[['congestion_1','congestion_2']]
-        # df2019[['congestion_1','congestion_2']] = 1/df2019[['congestion_1','congestion_2']]
-        # df2020[['congestion_1','congestion_2']] = 1/df2020[['congestion_1','congestion_2']]
-
         # congestion normalize & train test split
+        # 연도별로 train test split
         if self.shuffle == 0:
             total_df[['congestion_1','congestion_2','visitor']] =\
                 scaler.fit_transform(pd.DataFrame(total_df[['congestion_1','congestion_2','visitor']]))
@@ -68,6 +65,7 @@ class Preprocessing():
             train_df = df2018
             test_df = df2019
             print("Complete Normalize Datasets")
+        # 전체 연도 dataset을 합쳐서 stratified train test split
         else:
             total_df[['congestion_1','congestion_2','visitor']] =\
                 scaler.fit_transform(pd.DataFrame(total_df[['congestion_1','congestion_2','visitor']]))

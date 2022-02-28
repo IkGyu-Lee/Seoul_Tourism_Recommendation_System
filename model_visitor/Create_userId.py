@@ -20,9 +20,9 @@ class Create_userId(nn.Module):
         self.pretrained_GMF = pretrained_GMF
         self.pretrained_MLP = pretrained_MLP
 
-        # num_dim = int(num_factor/2)
         # userId Embedding
         if GMF_model:
+            # GMF: item(destination) dimension과 동일해야 하기 때문에, user info에 해당하는 6개의 feature들의 num_factor를 6으로 나눔
             num_dim = int(num_factor / 6)
             self.dayofweek_embedding = nn.Embedding(num_embeddings=num_dayofweek,
                                                       embedding_dim=num_dim)
@@ -37,6 +37,8 @@ class Create_userId(nn.Module):
             self.day_embedding = nn.Embedding(num_embeddings=num_day,
                                                       embedding_dim=num_dim)
         else:
+            # MLP: item(destination) dimension이 num_factor * (2 ** (num_layer - 2))에 해당하기 때문에,
+            # user info에 해당하는 6개의 feature들의 num_factor를 3으로 나눔
             num_dim = int(num_factor / 3)
             self.dayofweek_embedding = nn.Embedding(num_embeddings=num_dayofweek,
                                                       embedding_dim=num_dim)
@@ -51,7 +53,7 @@ class Create_userId(nn.Module):
             self.day_embedding = nn.Embedding(num_embeddings=num_day,
                                                       embedding_dim=num_dim)
 
-        # userId Network
+        # userId Network(create userId by MLP layer)
         # if GMF_model:
         #     self.User_Net = nn.Sequential(nn.Linear(num_dim * 6, num_factor),
         #                                   nn.BatchNorm1d(num_factor),
@@ -63,7 +65,9 @@ class Create_userId(nn.Module):
         #                                   nn.LeakyReLU()
         #                                   )
 
+        # NeuMF(with pretraining)을 사용할 때, pretrained GMF/MLP에서 각 embedding의 weight 불러오기
         if use_pretrain:
+            # pretrained GMF model에 해당하는 weight 불러오기
             if GMF_model:
                 self.dayofweek_embedding.weight.data.copy_(
                     self.pretrained_GMF.Create_userId.dayofweek_embedding.weight)
@@ -77,6 +81,7 @@ class Create_userId(nn.Module):
                     self.pretrained_GMF.Create_userId.month_embedding.weight)
                 self.day_embedding.weight.data.copy_(
                     self.pretrained_GMF.Create_userId.day_embedding.weight)
+            # pretrained MLP model에 해당하는 weight 불러오기
             else:
                 self.dayofweek_embedding.weight.data.copy_(
                     self.pretrained_MLP.Create_userId.dayofweek_embedding.weight)
@@ -90,6 +95,7 @@ class Create_userId(nn.Module):
                     self.pretrained_MLP.Create_userId.month_embedding.weight)
                 self.day_embedding.weight.data.copy_(
                     self.pretrained_MLP.Create_userId.day_embedding.weight)
+        # NeuMF(with pretraining)을 사용하지 않을 때, embedding initialization
         else:
             # Embedding weight initialization(normal|uniform)
             nn.init.normal_(self.dayofweek_embedding.weight, mean=0.0, std=0.1)

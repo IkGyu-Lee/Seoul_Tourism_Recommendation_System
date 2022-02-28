@@ -241,6 +241,7 @@ else:
     print(f'Training Time: {end - start}')
     print('-------------------Train Finished-------------------')
 
+# visitor, congestion1/2로 학습한 모델들 저장: demo 용도 + congestion1/2 dataframe 만들 용도
 if save_model:
     MODEL_PATH = os.path.join(pretrain_dir,
                               f'{args.shuffle}_{use_pretrain}_{args.model_name}_{args.epochs}_{args.batch}_{args.num_factors}_{rating_name}.pth')

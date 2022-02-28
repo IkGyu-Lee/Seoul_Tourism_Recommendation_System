@@ -10,5 +10,5 @@ parser.add_argument('-nf', '--num_factors', type=int, default=24, help='number o
 parser.add_argument('-nl', '--num_layers', type=int, default=3, help='number of hidden layers in NCF Model: [0, 1, 2, 3, 4]')
 parser.add_argument('-pr', '--use_pretrain', type=str, default='False', help='use pretrained model_visitor or not for NeuMF')
 parser.add_argument('-save', '--save_model', type=str, default='False', help='save trained model_visitor or not')
-parser.add_argument('-tar','--target', default= 'v', type = str, help='select v(vistor) or c1(congestion_1) or c2(congestion_2)')
+parser.add_argument('-tar', '--target', default='v', type=str, help='select v(vistor) or c1(congestion_1) or c2(congestion_2)')
 args = parser.parse_args()

@@ -24,6 +24,7 @@ class NeuMF(nn.Module):
         self.pretrained_GMF = pretrained_GMF
         self.pretrained_MLP = pretrained_MLP
 
+        # GMF 객체 생성
         self.GMF = GMF(num_factor=num_factor,
                        num_dayofweek=num_dayofweek,
                        num_time=num_time,
@@ -35,6 +36,7 @@ class NeuMF(nn.Module):
                        use_pretrain=use_pretrain,
                        use_NeuMF=use_NeuMF,
                        pretrained_GMF=pretrained_GMF)
+        # MLP 객체 생성
         self.MLP = MLP(num_factor=num_factor,
                        num_layer=num_layer,
                        num_dayofweek=num_dayofweek,
@@ -48,7 +50,9 @@ class NeuMF(nn.Module):
                        use_NeuMF=use_NeuMF,
                        pretrained_MLP=pretrained_MLP)
 
+        # GMF와 MLP의 output을 합쳤기 때문에 num_factor의 2배
         self.predict_layer = nn.Linear(num_factor*2, 1)
+        # activation function은 LeakyReLU
         self.relu = nn.LeakyReLU()
 
         if use_pretrain:

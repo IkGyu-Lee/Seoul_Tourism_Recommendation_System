@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 
+# csv file -> pickle file
 ROOT_DIR = 'dataset'
 DEST_INFO_PATH = os.path.join(ROOT_DIR, 'destination_id_name_genre_coordinate.csv')
 PREDICTED_CONGEST_PATH = os.path.join(ROOT_DIR, 'congestion_1_2.csv')

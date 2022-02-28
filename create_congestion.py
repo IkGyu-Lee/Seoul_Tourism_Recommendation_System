@@ -96,16 +96,17 @@ for month, day, dayofweek, time, destination in sample_dataloader:
 
 c1_list = c1_tensor.view(-1).tolist()
 c2_list = c2_tensor.view(-1).tolist()
-#print(c1_list[0:100])
+# print(c1_list[0:100])
 
 sample_df['congestion_1'] = c1_list
 sample_df['congestion_2'] = c2_list
-#print(sample_df.iloc[0:100,5])
+# print(sample_df.iloc[0:100,5])
 
 pretrain_dir = 'dataset'
 if not os.path.exists(pretrain_dir):
     os.mkdir(pretrain_dir)
 
 
-#print(sample_df.describe())
+# print(sample_df.describe())
+# demo에 사용할 모든 경우의 월/일/요일/타임에 대한 관광지들의 혼잡도 1,2 dataframe 생성
 sample_df.to_csv('dataset/congestion_1_2.csv', index=False)

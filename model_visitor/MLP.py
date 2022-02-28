@@ -22,6 +22,7 @@ class MLP(nn.Module):
         self.use_NeuMF = use_NeuMF
         self.pretrained_MLP = pretrained_MLP
 
+        # user info로 userId output 만들 객체 생성
         self.Create_userId = Create_userId(num_factor=num_factor,
                                            num_dayofweek=num_dayofweek,
                                            num_time=num_time,
@@ -37,18 +38,23 @@ class MLP(nn.Module):
         self.item_embedding = nn.Embedding(num_embeddings=num_destination,
                                            embedding_dim=num_factor * (2 ** (num_layer - 2)))
 
+        # MLP layer module lsit 생성
         MLP_modules = []
         for i in range(1, num_layer):
           input_size = num_factor * (2 ** (num_layer - i))
           MLP_modules.append(nn.Linear(input_size, input_size // 2))
           MLP_modules.append(nn.BatchNorm1d(input_size // 2))
           MLP_modules.append(nn.LeakyReLU())
+        # list안에 있는 module list Sequential로 연결시켜주기
         self.MLP_layers = nn.Sequential(*MLP_modules)
 
+        # 최종 predictive_size는 parser로 받은 num_factor로 맞춘다.
         predict_size = num_factor
         self.predict_layer = nn.Linear(predict_size, 1)
+        # activation function은 LeakyReLU
         self.relu = nn.LeakyReLU()
 
+        # NeuMF(with pretraining)을 사용할 때, embedding & layer weight, bias들 불러오기
         if use_pretrain:
             self.item_embedding.weight.data.copy_(
                 self.pretrained_MLP.item_embedding.weight)
@@ -56,8 +62,9 @@ class MLP(nn.Module):
                 if isinstance(layer, nn.Linear) and isinstance(pretrained_layer, nn.Linear):
                     layer.weight.data.copy_(pretrained_layer.weight)
                     layer.bias.data.copy_(pretrained_layer.bias)
+        # NeuMF(with pretraining)을 사용할 때, embedding & layer weight initialization
         else:
-            # Layer weight initialization
+            # Layer weight initialization(NeuMF용이 아니라, MLP용 일때만)
             if not use_NeuMF:
                 # nn.init.uniform_(self.predict_layer.weight)
                 # nn.init.normal_(self.predict_layer.weight)
@@ -66,7 +73,7 @@ class MLP(nn.Module):
 
             # Embedding weight initialization(normal|uniform)
             nn.init.normal_(self.item_embedding.weight, mean=0.0, std=0.1)
-            #nn.init.uniform_(self.item_embedding.weight, a=-1, b=1)
+            # nn.init.uniform_(self.item_embedding.weight, a=-1, b=1)
 
             # Layer weight initialization
             for layer in self.MLP_layers:

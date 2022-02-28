@@ -1,5 +1,6 @@
 import torch
 
+# RMSE for visitor
 def RMSE(model, criterion, test_dataloader, device):
     total_loss = 0
     with torch.no_grad():
@@ -18,6 +19,7 @@ def RMSE(model, criterion, test_dataloader, device):
             total_loss += loss
     return total_loss/len(test_dataloader)
 
+# RMSE for congestion
 def RMSE_con(model, criterion, test_dataloader, device):
     total_loss = 0
     with torch.no_grad():
