@@ -4,7 +4,50 @@
 > 
 >Train Dataset is private.
 
-### Quick Start
+### Directory Tree
+```python
+├── README.md
+├── dataset
+│   ├── congestion.pkl
+│   ├── destination_id_name_genre_coordinate.pkl
+│   └── seoul_gu_dong_coordinate.pkl
+├── demo.py
+├── main.py
+├── data_utils.py
+├── evaluate.py
+├── parser.py
+├── model_visitor
+│   ├── Create_userId.py
+│   ├── GMF.py
+│   ├── MLP.py
+│   └── NeuMF.py
+├── model_congestion
+│   ├── GMF.py
+│   └── MF.py
+├── pretrain_model
+│   ├── GMF.z01 ... GMF.zip
+│   ├── MLP.z01 ... MLP.zip
+│   └── NeuMF0.z01 ... NeuMF0.zip
+├── create_congestion.py
+└── csv_to_pickle.py
+```
+
+### Dependency
+```bash
+Python        >= 3.7
+tokenizers    >= 0.9.4
+torch         >= 1.10.2
+konlpy        >= 0.6.0
+pandas        >= 1.3.5
+numpy         >= 1.21.5
+```
+
+### Development Environment
+- OS: ubuntu
+- IDE: vim
+- GPU: NVIDIA RTX A6000
+
+### Unzip Pretrained Model
 ```bash
 cd pretrain_model
 cat GMF.* > pretrain_GMF.zip
@@ -13,7 +56,6 @@ cat MLP.* > pretrain_MLP.zip
 unzip pretrain_MLP.zip
 cat NeuMF0.* > pretrain_NeuMF0.zip
 unzip pretrain_NeuMF0.zip
-python demo.py
 ```
 
 ### Change Model in demo.py
@@ -24,6 +66,11 @@ def define_args():
     epochs = 10           # Choice 20,  10,  10
     num_factors = 36      # Choice 36,  24,  36
     return use_pretrain, model_name, epochs, num_factors
+```
+
+### Quick Start
+```bash
+python demo.py
 ```
 
 ### Demo Video
