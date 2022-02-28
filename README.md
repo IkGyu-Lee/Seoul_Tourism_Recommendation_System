@@ -1,7 +1,8 @@
 ### Seoul Tourism Recommendation System using MF & NCF(GMF, MLP, NeuMF without pretraining, NeuMF with pretraining)
-Train Dataset is private.
 
-This repository contains a demo based on pretrained models.
+>This repository contains a demo based on pretrained models.
+> 
+>Train Dataset is private.
 
 ### Quick Start
 ```bash
@@ -24,3 +25,6 @@ def define_args():
     num_factors = 36      # Choice 36,  24,  36
     return use_pretrain, model_name, epochs, num_factors
 ```
+
+### Demo Video
+<img width="100%" src="https://i.imgur.com/VUkg97W.gif"/>

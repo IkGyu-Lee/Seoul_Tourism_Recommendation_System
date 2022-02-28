@@ -311,7 +311,7 @@ if __name__ == '__main__' :
             tmp_rank[dest[0]] = ratio[0] * (batch_candidate - i)
         for i, dest in enumerate(sorted_congestion_ranking):
             tmp_rank[dest[0]] += ratio[1] * (batch_candidate - i)
-        for i, dest in enumerate(sorted_congestion_ranking):
+        for i, dest in enumerate(sorted_distance_ranking):
             tmp_rank[dest[0]] += ratio[2] * (batch_candidate - i)
             val = total_dest.get(dest[0])
             if val is None:
